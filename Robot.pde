@@ -14,6 +14,7 @@ class Robot {
   private Barrier RobotEdges[] = new Barrier[4];
   private float[][] Corners = this.getCorners();
   private float[][][] Lines = this.getLines();
+  private int collidingNum = 0;
   
   // Constants
   private int stroke = 0;
@@ -134,14 +135,32 @@ class Robot {
     }
     
     inCollision = false;
-    //for(Barrier barrier : Barriers) {
-    //  if(this.isColliding(barrier)) {
-    //    inCollision = true;
-    //    vel.mag = input.proj(barrier.getAngle()).mag + 2 * input.rej(barrier.getAngle()).mag;
-    //    vel.dir = input.proj(barrier.getAngle()).dir + 2 * input.rej(barrier.getAngle()).dir;
-    //    vel.mag *= decel * velMultiplier;
-    //  }
-    //}
+    for(Barrier barrier : Barriers) {
+      if(this.isColliding(barrier) > 1) {
+        inCollision = true;
+        vel = input.proj(barrier.getAngle());
+        if(input.mag > 0.5) {
+          x += 2 * input.rej(barrier.getAngle()).getX();
+          y += 2 * input.rej(barrier.getAngle()).getY();
+        }
+        else {
+          if(barrier.distFrom(x, y) < 0) {
+            x += 2 * sin(radians(barrier.getAngle()));
+            y += 2 * cos(radians(barrier.getAngle()));
+          }
+          else {
+            x -= 2 * sin(radians(barrier.getAngle()));
+            y -= 2 * cos(radians(barrier.getAngle()));
+          }
+          
+        }
+        vel.mag *= decel * velMultiplier;
+      }
+      else if(this.isColliding(barrier) > 0) {
+        inCollision = true;
+        vel.mag = -0.5;
+      }
+    }
     if(!inCollision) {
       vel = input;
     }
@@ -158,7 +177,13 @@ class Robot {
     }
   }
   
-  boolean isColliding(Barrier barrier) {
-    return barrier.isColliding(RobotEdges[0]) || barrier.isColliding(RobotEdges[1]) || barrier.isColliding(RobotEdges[2]) || barrier.isColliding(RobotEdges[3]);
+  int isColliding(Barrier barrier) {
+    collidingNum = 0;
+    for(Barrier edge : RobotEdges) {
+      if(barrier.isColliding(edge)) {
+        collidingNum++;
+      }
+    }
+    return collidingNum;
   }
 }

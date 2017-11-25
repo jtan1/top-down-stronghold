@@ -33,7 +33,7 @@ class Boulder {
   }
   
   boolean isColliding(Barrier barrier) {
-    if(abs((barrier.x1 - barrier.x2) * (barrier.x1 + barrier.x2 - 2 * x) + (barrier.y1 - barrier.y2) * (barrier.y1 + barrier.y2 - 2 * y)) < pow(barrier.x2 - barrier.x1, 2) + pow(barrier.y2 - barrier.y1, 2)) {
+    if(abs(barrier.distFrom(x, y)) < pow(barrier.x2 - barrier.x1, 2) + pow(barrier.y2 - barrier.y1, 2)) {
       return pow((barrier.y2 - barrier.y1) * (x - barrier.x1) - (barrier.x2 - barrier.x1) * (y - barrier.y1), 2) < 156.25 * (pow(barrier.x2 - barrier.x1, 2) + pow(barrier.y2 - barrier.y1, 2));
     }
     else

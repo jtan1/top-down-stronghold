@@ -38,10 +38,14 @@ class Barrier {
       xIntersect = (((y1 - barrier.y1) * (x2 - x1) * (barrier.x2 - barrier.x1)) + (barrier.x1 * (x2 - x1) * (barrier.y2 - barrier.y1)) - (x1 * (y2 - y1) * (barrier.x2 - barrier.x1))) / (((x2 - x1) * (barrier.y2 - barrier.y1)) - ((y2 - y1) * (barrier.x2 - barrier.x1)));
     }
     yIntersect = ((y2 - y1) * (xIntersect - x1) / (x2 - x1)) + y1;
-    return((xIntersect <= max(x1, x2)) && (xIntersect >= min(x1, x2)) && (xIntersect <= max(barrier.x1, barrier.x2)) && (xIntersect >= min(barrier.x1, barrier.x2)) && (yIntersect <= max(y1, y2)) && (yIntersect >= min(y1, y2)) && (yIntersect <= max(barrier.y1, barrier.y2)) && (yIntersect >= min(barrier.y1, barrier.y2)));
+    return (xIntersect <= max(x1, x2)) && (xIntersect >= min(x1, x2)) && (xIntersect <= max(barrier.x1, barrier.x2)) && (xIntersect >= min(barrier.x1, barrier.x2)) && (yIntersect <= max(y1, y2)) && (yIntersect >= min(y1, y2)) && (yIntersect <= max(barrier.y1, barrier.y2)) && (yIntersect >= min(barrier.y1, barrier.y2));
   }
   
   float getAngle() {
     return degrees(atan((y2 - y1) / (x2 - x1)));
+  }
+  
+  float distFrom(float x, float y) {
+    return (x1 - x2) * (x1 + x2 - 2 * x) + (y1 - y2) * (y1 + y2 - 2 * y);
   }
 }
